@@ -1,20 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import "./AddIssue.css";
 
 function AddIssue() {
-  const [addIssue, setAddIssue] = useState(true);
+  const [desc, setDesc] = useState(true);
+  const [dev, setDev] = useState(true);
+  const [priority, setPriority] = useState(true);
+
+  const addToLocalStorage = () => {
+    let newIssue = {
+      desc: desc,
+      dev: dev,
+      priority: priority,
+    };
+
+    localStorage.getItem("issues");
+
+    localStorage.setItem("issues", JSON.stringify(newIssue));
+  };
 
   return (
     <div className="add-issue">
       <form>
         <label>
           Description
-          <input type="text" placeholder="Description of issue..." />
+          <input
+            id="description"
+            type="text"
+            placeholder="Description of issue..."
+            onKeyUp={() =>
+              setDesc(document.getElementById("description").value)
+            }
+          />
         </label>
         <label>
           Assign To
-          <select name="forDev" id="forDev">
+          <select
+            name="forDev"
+            id="forDev"
+            onChange={() => setDev(document.getElementById("forDev").value)}
+          >
             <option value="Caleb">Caleb</option>
             <option value="Jason">Jason</option>
             <option value="Metody">Metody</option>
@@ -24,7 +49,13 @@ function AddIssue() {
         </label>
         <label>
           Priority
-          <select name="priority" id="priority">
+          <select
+            name="priority"
+            id="priority"
+            onChange={() =>
+              setPriority(document.getElementById("priority").value)
+            }
+          >
             <option value="Critical">Critical</option>
             <option value="High">High</option>
             <option value="Medium">Medium</option>
@@ -32,7 +63,15 @@ function AddIssue() {
             <option value="Not">Not Important</option>
           </select>
         </label>
-        <button type="submit">Add</button>
+        <button
+          type="submit"
+          onSubmit={(e) => {
+            e.preventDefault();
+            addToLocalStorage();
+          }}
+        >
+          Add
+        </button>
       </form>
     </div>
   );
